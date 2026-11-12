@@ -1,0 +1,100 @@
+@startuml diagrama_classes
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam linetype ortho
+skinparam nodesep 45
+skinparam ranksep 60
+skinparam defaultFontName "DejaVu Sans"
+skinparam classFontSize 14
+skinparam classBackgroundColor #FDFDFD
+skinparam classBorderColor #333333
+skinparam ArrowColor #333333
+hide empty members
+
+class Main {
+  + {static} main(args : String[]) : void
+}
+
+class GerenciadorTarefas {
+  - tarefas : List<Tarefa>
+  - proximoId : int
+  + adicionar(titulo, descricao, prazo, prioridade, recorrencia) : Tarefa
+  + buscar(id : int) : Tarefa
+  + editar(id, titulo, descricao, prazo, prioridade) : void
+  + remover(id : int) : void
+  + listar() : List<Tarefa>
+  + filtrar(filtro : Filtro) : List<Tarefa>
+  + listarAtrasadas(hoje : LocalDate) : List<Tarefa>
+  + iniciar(id : int) : void
+  + concluir(id : int) : Tarefa
+  + reabrir(id : int) : void
+}
+
+class ArquivoTarefas {
+  + {static} salvar(tarefas : List<Tarefa>, arquivo : Path) : void
+  + {static} carregar(arquivo : Path) : List<Tarefa>
+}
+
+class Tarefa {
+  - id : int
+  - titulo : String
+  - descricao : String
+  - prazo : LocalDate
+  - prioridade : Prioridade
+  - recorrencia : Recorrencia
+  - estado : EstadoTarefa
+  + iniciar() : void
+  + concluir() : void
+  + reabrir() : void
+  + getStatus() : String
+  + estaAtrasada(hoje : LocalDate) : boolean
+  + criarProximaOcorrencia(novoId : int) : Tarefa
+  + editar(titulo, descricao, prazo, prioridade) : void
+}
+
+abstract class EstadoTarefa <<State>> {
+  + {abstract} getNome() : String
+  + iniciar(t : Tarefa) : void
+  + concluir(t : Tarefa) : void
+  + reabrir(t : Tarefa) : void
+}
+class Pendente
+class EmAndamento
+class Concluida
+
+interface Filtro <<Strategy>> {
+  + aceita(t : Tarefa) : boolean
+}
+class FiltroPorStatus
+class FiltroPorPrioridade
+class FiltroAtrasadas
+
+enum Prioridade {
+  BAIXA
+  MEDIA
+  ALTA
+}
+enum Recorrencia {
+  NENHUMA
+  DIARIA
+  SEMANAL
+  + proximaData(d : LocalDate) : LocalDate
+}
+
+Main ..> GerenciadorTarefas : usa
+Main ..> ArquivoTarefas : usa
+GerenciadorTarefas o--> "*" Tarefa
+GerenciadorTarefas ..> Filtro : usa
+ArquivoTarefas ..> Tarefa
+
+Tarefa *--> "1" EstadoTarefa
+Tarefa --> Prioridade
+Tarefa --> Recorrencia
+EstadoTarefa <|-- Pendente
+EstadoTarefa <|-- EmAndamento
+EstadoTarefa <|-- Concluida
+
+Filtro <|.. FiltroPorStatus
+Filtro <|.. FiltroPorPrioridade
+Filtro <|.. FiltroAtrasadas
+@enduml

@@ -1,0 +1,6 @@
+out/
+target/
+tarefas.txt
+*.class
+.idea/
+.vscode/
