@@ -1,6 +1,6 @@
-package rotina;
+// prioridade de uma tarefa
 
-/** Prioridade de uma tarefa. */
+
 public enum Prioridade {
     BAIXA, MEDIA, ALTA
 }

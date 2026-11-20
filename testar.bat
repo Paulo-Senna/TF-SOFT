@@ -1,8 +1,14 @@
 @echo off
-REM Compila o projeto e roda todos os testes (Windows, sem precisar de Maven).
+chcp 65001 >nul
+REM Compila o projeto e roda os testes unitarios (JUnit 4).
+REM Uso: testar.bat              (roda todas as classes de teste)
+REM      testar.bat TarefaTest   (roda so uma classe)
 if exist out rmdir /s /q out
 mkdir out
-set CP=lib\junit-4.13.2.jar;lib\hamcrest-core-1.3.jar
-javac --release 17 -encoding UTF-8 -d out src\main\java\rotina\*.java || exit /b 1
-javac --release 17 -encoding UTF-8 -cp "out;%CP%" -d out src\test\java\rotina\*.java || exit /b 1
-java -cp "out;%CP%" org.junit.runner.JUnitCore rotina.TarefaTest rotina.EstadoTarefaTest rotina.RecorrenciaTest rotina.FiltroTest rotina.GerenciadorTarefasTest rotina.ArquivoTarefasTest
+javac --release 17 -encoding UTF-8 -cp "lib\*" -d out src\*.java || exit /b 1
+if "%~1"=="" (
+    set TESTES=TarefaTest EstadoTarefaTest RecorrenciaTest GerenciadorTarefasTest PessoaTest SuperUsuarioTest BancoDadosTest TerminalTest
+) else (
+    set TESTES=%~1
+)
+java -Dfile.encoding=UTF-8 -cp "out;lib\*" org.junit.runner.JUnitCore %TESTES%

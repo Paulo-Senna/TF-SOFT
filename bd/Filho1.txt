@@ -1,0 +1,7 @@
+#tipo=comum
+#pastas=Geral;Mãe;Escola
+5;Prova de matematica;estudar para a minha prova de matematia;2026-08-29;ALTA;NENHUMA;Pendente;Escola
+2;Levar o lixo para fora;;2026-11-18;MEDIA;NENHUMA;Concluída;Mãe
+1;Lavar a louça;;2026-11-19;ALTA;NENHUMA;Concluída;Mãe
+3;Arrumar o quarto;;2026-11-22;MEDIA;NENHUMA;Pendente;Mãe
+4;Trabalho de história;Grupo de 3 pessoas;2026-11-24;ALTA;NENHUMA;Pendente;Escola

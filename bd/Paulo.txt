@@ -1,0 +1,4 @@
+#tipo=super
+#senha=1234
+#subordinados=
+#pastas=Geral

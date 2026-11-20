@@ -1,0 +1,7 @@
+#tipo=super
+#senha=1234
+#subordinados=Filho1;Filho2
+#pastas=Geral;Casa
+2;Fazer mercado;;2026-11-21;MEDIA;SEMANAL;Pendente;Casa
+1;Pagar contas;Luz, água e internet;2026-11-25;ALTA;MENSAL;Pendente;Casa
+3;Consulta no dentista;;2026-11-30;MEDIA;NENHUMA;Pendente;Geral

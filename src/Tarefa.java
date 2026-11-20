@@ -1,9 +1,7 @@
-package rotina;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-/** Uma atividade da rotina do usuário. */
+//uma atividade da rotina do usuário, guardada dentro de uma pasta
 public class Tarefa {
     public static final int TAMANHO_MAX_TITULO = 100;
 
@@ -13,13 +11,17 @@ public class Tarefa {
     private LocalDate prazo;
     private Prioridade prioridade;
     private final Recorrencia recorrencia;
+    private final String pasta;
     private EstadoTarefa estado;
 
     public Tarefa(int id, String titulo, String descricao, LocalDate prazo,
-                  Prioridade prioridade, Recorrencia recorrencia) {
+                  Prioridade prioridade, Recorrencia recorrencia, String pasta) {
         validar(titulo, prazo, prioridade);
         if (recorrencia == null) {
             throw new IllegalArgumentException("A recorrência é obrigatória.");
+        }
+        if (pasta == null || pasta.isBlank()) {
+            throw new IllegalArgumentException("A pasta é obrigatória.");
         }
         this.id = id;
         this.titulo = titulo.trim();
@@ -27,20 +29,16 @@ public class Tarefa {
         this.prazo = prazo;
         this.prioridade = prioridade;
         this.recorrencia = recorrencia;
+        this.pasta = pasta.trim();
         this.estado = new Pendente();
     }
 
-    // ------------------------------------------------------------ status
-    public void iniciar() {
-        estado.iniciar(this);
-    }
 
+
+
+    // ------------------------------------------------------------ status
     public void concluir() {
         estado.concluir(this);
-    }
-
-    public void reabrir() {
-        estado.reabrir(this);
     }
 
     public String getStatus() {
@@ -51,30 +49,35 @@ public class Tarefa {
         return estado instanceof Concluida;
     }
 
-    /** Chamado pelos objetos de estado (padrão State) e ao carregar do arquivo. */
+    // chamado pelos objetos de estado (padrão State) e ao carregar do banco
     void setEstado(EstadoTarefa novoEstado) {
         this.estado = novoEstado;
     }
 
+
+
+
     // ------------------------------------------------------------ regras
-    /** Atrasada = prazo já passou e a tarefa ainda não foi concluída. */
+    //atrasada = prazo já passou e a tarefa ainda não foi concluída
     public boolean estaAtrasada(LocalDate hoje) {
         return !estaConcluida() && prazo.isBefore(hoje);
     }
 
-    /**
+
+
+    /**PS-
      * Para tarefas recorrentes, cria a próxima ocorrência (mesmos dados,
-     * novo prazo, status pendente). Retorna null se a tarefa não se repete.
+     * mesma pasta, novo prazo, status pendente). Retorna null se não se repete.
      */
     public Tarefa criarProximaOcorrencia(int novoId) {
         if (recorrencia == Recorrencia.NENHUMA) {
             return null;
         }
         return new Tarefa(novoId, titulo, descricao, recorrencia.proximaData(prazo),
-                prioridade, recorrencia);
+                prioridade, recorrencia, pasta);
     }
 
-    /** Altera os dados da tarefa. Valida tudo antes, para não alterar pela metade. */
+    //altera os dados da tarefa. Valida tudo antes, para não alterar pela metade
     public void editar(String titulo, String descricao, LocalDate prazo, Prioridade prioridade) {
         validar(titulo, prazo, prioridade);
         this.titulo = titulo.trim();
@@ -97,7 +100,15 @@ public class Tarefa {
         if (prioridade == null) {
             throw new IllegalArgumentException("A prioridade é obrigatória.");
         }
+
+
+
+
     }
+
+
+
+    
 
     // ------------------------------------------------------------ getters
     public int getId() { return id; }
@@ -106,10 +117,11 @@ public class Tarefa {
     public LocalDate getPrazo() { return prazo; }
     public Prioridade getPrioridade() { return prioridade; }
     public Recorrencia getRecorrencia() { return recorrencia; }
+    public String getPasta() { return pasta; }
 
     @Override
     public String toString() {
-        return String.format("#%d %s | prazo %s | %s | %s%s", id, titulo,
+        return String.format("#%d [%s] %s | prazo %s | %s | %s%s", id, pasta, titulo,
                 prazo.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
                 prioridade, getStatus(),
                 recorrencia == Recorrencia.NENHUMA ? "" : " | repete: " + recorrencia);

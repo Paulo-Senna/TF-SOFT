@@ -1,0 +1,5 @@
+#tipo=comum
+#pastas=Geral;Mãe;Escola
+1;Passear com o cachorro;;2026-11-20;MEDIA;DIARIA;Pendente;Mãe
+3;Treino de futebol;;2026-11-23;BAIXA;SEMANAL;Pendente;Geral
+2;Estudar para a prova de matemática;;2026-11-27;ALTA;NENHUMA;Pendente;Escola
